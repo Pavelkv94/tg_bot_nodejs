@@ -1,0 +1,24 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "telegramm-bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "Pavel.kv94",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "node-schedule": "^2.0.0",
+    "node-telegram-bot-api": "^0.54.0",
+    "nodemon": "^2.0.12",
+    "request": "^2.88.2",
+    "requestify": "^0.2.5",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
