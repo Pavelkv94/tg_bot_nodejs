@@ -1,13 +1,20 @@
-const TelegramApi = require("node-telegram-bot-api");
+
 const schedule = require('node-schedule');
 const { gameOptions, againOptions } = require('./options')
 const mongoose = require('mongoose');
 const runMongo = require("./mongo");
 const request = require('request');
+const getWeather = require("./weather");
+const bot = require('./bot');
 
-let options = {
-    url: "https://openweathermap.org/data/2.5/weather?id=625144&appid=439d4b804bc8187953eb36d2a8c26a02",
-};
+// let options = {
+//     url: "https://openweathermap.org/data/2.5/weather?id=625144&appid=439d4b804bc8187953eb36d2a8c26a02",
+// };
+
+// let options = {
+//     url: "https://www.onliner.by/sdapi/pogoda/api/forecast",
+// };
+
 let state = {
     weather: {
         currentTemperature: "",
@@ -30,10 +37,6 @@ function sendTime(time, msg, text) {
 }
 
 
-//наш токен
-const token = '2003087080:AAHycENSvEw7GQWyGBt3XWNtuFBFJHDc_js'
-//создали бота
-const bot = new TelegramApi(token, { polling: true })
 //Устанавливаем основные команды для бота с описанием
 bot.setMyCommands([
     { command: '/start', description: "start" },
@@ -43,12 +46,30 @@ bot.setMyCommands([
 ])
 
 
-request.get(options, function (err, res, body) {
-    state.weather.currentTemperature = JSON.parse(res.body).main.temp
-    state.weather.weather = JSON.parse(res.body).weather[0].description
-})
-//отложенная отправка
+// request.get(options, function (err, res, body) {
+//     state.weather.currentTemperature = JSON.parse(res.body).main.temp
+//     state.weather.weather = JSON.parse(res.body).weather[0].description
+// })
+// let a = []
 
+// request.get(options, function (err, res, body) {
+
+//     let temp = JSON.parse(body)
+
+
+//     const callBack = () => {
+//         bot.on('message', async (msg) => {
+//             const text = msg.text;
+//             const chatId = msg.chat.id
+
+//             bot.sendMessage(chatId, `Сейчас   ${temp.now.phenomena}`)
+//             return bot.sendMessage(chatId, `1 🌧`)
+//         }
+//         )
+//     }
+//     botAction()
+// })
+// console.log(a)
 
 
 //for game
@@ -77,8 +98,8 @@ const botAction = () => {
 
             }
             if (text === '/weather') {
-                await bot.sendMessage(chatId, `Сейчас  ${Math.round(state.weather.currentTemperature)} градусов`)
-                return bot.sendMessage(chatId, `${state.weather.weather} 🌧`)
+
+              return   getWeather();
             }
             if (text === "/game1") {
                 return startGame(chatId)
