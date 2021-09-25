@@ -7,14 +7,6 @@ const request = require('request');
 const getWeather = require("./weather");
 const bot = require('./bot');
 
-// let options = {
-//     url: "https://openweathermap.org/data/2.5/weather?id=625144&appid=439d4b804bc8187953eb36d2a8c26a02",
-// };
-
-// let options = {
-//     url: "https://www.onliner.by/sdapi/pogoda/api/forecast",
-// };
-
 let state = {
     weather: {
         currentTemperature: "",
@@ -46,39 +38,10 @@ bot.setMyCommands([
 ])
 
 
-// request.get(options, function (err, res, body) {
-//     state.weather.currentTemperature = JSON.parse(res.body).main.temp
-//     state.weather.weather = JSON.parse(res.body).weather[0].description
-// })
-// let a = []
-
-// request.get(options, function (err, res, body) {
-
-//     let temp = JSON.parse(body)
-
-
-//     const callBack = () => {
-//         bot.on('message', async (msg) => {
-//             const text = msg.text;
-//             const chatId = msg.chat.id
-
-//             bot.sendMessage(chatId, `Сейчас   ${temp.now.phenomena}`)
-//             return bot.sendMessage(chatId, `1 🌧`)
-//         }
-//         )
-//     }
-//     botAction()
-// })
-// console.log(a)
-
 
 //for game
 const chats = {}
 
-
-// bot.onText(/\/send/, msg => {
-//     sendTime(1,msg,'текст')
-// })
 
 const startGame = async (chatId) => {
     await bot.sendMessage(chatId, `Сейчас я загадаю цифру от 0 до 9, а ты должен ее угадать!`);
@@ -86,8 +49,9 @@ const startGame = async (chatId) => {
     chats[chatId] = randomNumber;
     await bot.sendMessage(chatId, 'Отгадывай', gameOptions);
 }
-//
+
 const botAction = () => {
+  //communicate
     bot.on('message', async (msg) => {
         const text = msg.text;
         const chatId = msg.chat.id
@@ -95,10 +59,8 @@ const botAction = () => {
             if (text === '/start') {
                 await bot.sendMessage(chatId, `Приветствую тебя ${msg.from.first_name}! Я твой личный ассистент. Пока нахожусь в демо-версии поэтому могу тупить)`)
                 return bot.sendSticker(chatId, "https://tlgrm.ru/_/stickers/9ef/db1/9efdb148-747f-30f8-9575-7f6e06d34bac/7.webp")
-
             }
             if (text === '/weather') {
-
               return   getWeather();
             }
             if (text === "/game1") {
@@ -109,9 +71,6 @@ const botAction = () => {
                     sendTime(0.1, msg, 'Этот текст сработал через 6 секунд')
                 })
             }
-
-
-
 
             return bot.sendMessage(chatId, "Я не понимаю тебя, попробуй еще раз!")
         }

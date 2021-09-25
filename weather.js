@@ -1,3 +1,12 @@
+// let options = {
+//     url: "https://openweathermap.org/data/2.5/weather?id=625144&appid=439d4b804bc8187953eb36d2a8c26a02",
+// };
+
+// let options = {
+//     url: "https://www.onliner.by/sdapi/pogoda/api/forecast",
+// };
+
+
 // {
 //     now: {
 //       phenomena: 'Сплошная облачность',
@@ -103,37 +112,53 @@
 //     city: 'Минске'
 //   }
 
-
-const request = require('request');
-const bot = require('./bot');
+const request = require("request");
+const bot = require("./bot");
 let id;
-bot.on('message', async (msg) => {
-    const text = msg.text;
-    id = msg.chat.id
-})
+bot.on("message", async (msg) => {
+  const text = msg.text;
+  id = msg.chat.id;
+});
 
 function getWeather() {
-    let options = {
-        url: "https://www.onliner.by/sdapi/pogoda/api/forecast",
-    };
+  let options = {
+    url: "https://www.onliner.by/sdapi/pogoda/api/forecast",
+  };
 
-    let a = request.get(options, function (err, res, body) {
-        let data = JSON.parse(body)
-        let nowTemp = data.now.temperature
-        let nowWeather = data.now.phenomena
-        let date = data.today.date
-        let dayTemp = data.today.day.temperature
-        let dayWeather = data.today.day.phenomena
-        let evTemp = data.today.evening.temperature
-        let evWeather = data.today.evening.phenomena
-        
-        bot.sendMessage(id,
-            `🚀 Доброе утро! 🚀
-         Сегодня ${date}, прямо сейчас ${nowTemp}, ${nowWeather}. 🧐
-         🌞 Днем ${dayTemp}, ${dayWeather}. 
-         🌓 Вечером ${evTemp}, ${evWeather}.`)
+   request.get(options, function (err, res, body) {
+    let data = JSON.parse(body);
+    let nowTemp = data.now.temperature;
+    let nowWeather = data.now.phenomena;
+    let date = data.today.date;
+    let dayTemp = data.today.day.temperature;
+    let dayWeather = data.today.day.phenomena;
+    let evTemp = data.today.evening.temperature;
+    let evWeather = data.today.evening.phenomena;
+    let nTemp = data.today.night.temperature;
+    let nWeather = data.today.night.phenomena;
+    let currentTime = new Date().getHours();
+    if ((currentTime > 6) & (currentTime < 12)) {
+      bot.sendMessage(
+        id,
+        `🚀 Доброе утро! 🚀
+            Сегодня ${date}, прямо сейчас ${nowTemp}, ${nowWeather}. 🧐
+            🌞 Днем ${dayTemp}, ${dayWeather}. 
+            🌓 Вечером ${evTemp}, ${evWeather}.`
+      );
+    } else if ((currentTime >= 12) & (currentTime < 18)) {
+      bot.sendMessage(
+        id,
+        `Сегодня ${date}, прямо сейчас ${nowTemp}, ${nowWeather}. 🧐
+         🌓 Вечером ${evTemp}, ${evWeather}.
+         🌙 Ночью ${nTemp}, ${nWeather}`
+      );
+    } else {
+        bot.sendMessage(
+            id,
+            `Сегодня ${date}, прямо сейчас ${nowTemp}, ${nowWeather}. 🧐`
+          );
     }
-    )
+  });
 }
 
 module.exports = getWeather;
